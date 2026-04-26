@@ -2,12 +2,31 @@ import streamlit as st
 import yfinance as yf
 import pandas as pd
 import numpy as np
-import pandas_ta as ta
+import pandas_ta as ta  # Pastikan di requirements.txt tertulis pandas-ta
 from bs4 import BeautifulSoup
 import requests
 
 # Konfigurasi Halaman
 st.set_page_config(page_title="Wyckoff Engine V4", layout="wide")
+
+# Tambahan CSS untuk mempercantik tombol dan UI
+st.markdown("""
+    <style>
+    .stButton>button {
+        width: 100%;
+        border-radius: 5px;
+        height: 3em;
+        background-color: #2ecc71;
+        color: white;
+        border: none;
+        font-weight: bold;
+    }
+    .stButton>button:hover {
+        background-color: #27ae60;
+        color: white;
+    }
+    </style>
+    """, unsafe_allow_html=True)
 
 # ==========================================
 # 1. ANALISIS SENTIMEN (KATALIS BERITA)
@@ -38,7 +57,6 @@ def get_news_sentiment(ticker):
 @st.cache_data(ttl=3600)
 def get_ultimate_wyckoff_v4(ticker, index_ticker="^JKSE"):
     try:
-        # Ticker asli tetap digunakan untuk download data
         df = yf.download(ticker, period="1y", interval="1d", progress=False)
         idx = yf.download(index_ticker, period="1y", interval="1d", progress=False)
         
@@ -90,7 +108,7 @@ def get_ultimate_wyckoff_v4(ticker, index_ticker="^JKSE"):
             decision = "AVOID"
 
         return {
-            "Ticker": ticker.replace(".JK", ""), # Tampilan tanpa .JK
+            "Ticker": ticker.replace(".JK", ""),
             "Price": int(c_price),
             "Buy Area": f"{int(support)} - {int(buy_max)}",
             "Target": int(target_pf),
@@ -110,15 +128,14 @@ def get_ultimate_wyckoff_v4(ticker, index_ticker="^JKSE"):
 st.title("📈 Wyckoff Market Analysis Engine")
 st.markdown("Screener saham otomatis untuk IHSG (Tanpa perlu mengetik .JK)")
 
-# Input Watchlist (User cukup input kode saham saja)
+# Sidebar Input
 default_watchlist = 'BBCA, BBRI, BMRI, TLKM, ASII, GOTO, BRMS, ADRO, AMRT, ANTM'
 input_stocks = st.sidebar.text_area("Masukkan Kode Saham (pisahkan dengan koma):", default_watchlist)
 
-# Proses input: hilangkan spasi, ubah ke uppercase, dan tambahkan .JK otomatis
 watchlist_raw = [s.strip().upper() for s in input_stocks.split(',')]
 watchlist_jk = [f"{s}.JK" if not s.endswith(".JK") else s for s in watchlist_raw]
 
-if st.button("Run Analysis" ,type="primary"):
+if st.button("Run Analysis", type="primary"):
     results = []
     
     with st.spinner('Sedang menarik data dari Yahoo Finance...'):
@@ -139,12 +156,12 @@ if st.button("Run Analysis" ,type="primary"):
             return f'background-color: {color}; color: black; font-weight: bold'
 
         st.subheader("Hasil Screening")
-        # Kode lama (Error di Pandas 3.0)
-st.dataframe(
-    df_result.style.applymap(highlight_decision, subset=['Decision']),
-    use_container_width=True,
-    hide_index=True
-)
+        # Menggunakan .map() karena .applymap() dihapus di Pandas 3.0+
+        st.dataframe(
+            df_result.style.map(highlight_decision, subset=['Decision']),
+            use_container_width=True,
+            hide_index=True
+        )
         st.success(f"Berhasil menganalisis {len(results)} saham.")
     else:
         st.error("Data tidak ditemukan. Pastikan kode saham benar.")
