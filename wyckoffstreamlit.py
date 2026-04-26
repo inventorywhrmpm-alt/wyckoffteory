@@ -83,19 +83,7 @@ def get_ultimate_wyckoff_v4(ticker, index_ticker="^JKSE"):
         vol_label = "HIGH 🔥" if vol_ratio > 1.5 else "NORMAL" if vol_ratio > 0.8 else "LOW 🧊"
 
 # Kemudian tambahkan ke dalam dictionary return:
-        return {
-            "Ticker": ticker.replace(".JK", ""),
-            "Price": int(c_price),
-            "Vol Ratio (5D/30D)": vol_ratio,
-            "Vol Status": vol_label,
-            "Buy Area": f"{int(support)} - {int(buy_max)}",
-            "Target": int(target_pf),
-            "Upside": f"{upside_pct}%",
-            "Decision": decision,
-            "Status": status,
-            "RS": rs_label,
-            "News Sentiment": get_news_sentiment(ticker)
-        }
+        
         
         curr = df.iloc[-1]
         c_price = float(curr['Close'])
@@ -139,6 +127,8 @@ def get_ultimate_wyckoff_v4(ticker, index_ticker="^JKSE"):
         return {
             "Ticker": ticker.replace(".JK", ""),
             "Price": int(c_price),
+            "Vol Ratio (5D/30D)": vol_ratio,
+            "Vol Status": vol_label,
             "Buy Area": f"{int(support)} - {int(buy_max)}",
             "Target": int(target_pf),
             "Upside": f"{upside_pct}%",
