@@ -127,7 +127,7 @@ def get_ultimate_wyckoff_v4(ticker, index_ticker="^JKSE"):
         return {
             "Ticker": ticker.replace(".JK", ""),
             "Price": int(c_price),
-            "Vol Ratio (5D/30D)": vol_ratio,
+            "Vol (5D/30D)": vol_ratio,
             "Vol Status": vol_label,
             "Buy Area": f"{int(support)} - {int(buy_max)}",
             "Target": int(target_pf),
