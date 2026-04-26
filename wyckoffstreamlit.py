@@ -139,11 +139,12 @@ if st.button("Run Analysis" ,type="primary"):
             return f'background-color: {color}; color: black; font-weight: bold'
 
         st.subheader("Hasil Screening")
-        st.dataframe(
-            df_result.style.applymap(highlight_decision, subset=['Decision']),
-            use_container_width=True,
-            hide_index=True
-        )
+        # Kode lama (Error di Pandas 3.0)
+st.dataframe(
+    df_result.style.applymap(highlight_decision, subset=['Decision']),
+    use_container_width=True,
+    hide_index=True
+)
         st.success(f"Berhasil menganalisis {len(results)} saham.")
     else:
         st.error("Data tidak ditemukan. Pastikan kode saham benar.")
