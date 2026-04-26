@@ -129,7 +129,7 @@ st.title("📈 Wyckoff Market Analysis Engine")
 st.markdown("Screener saham otomatis untuk IHSG (Tanpa perlu mengetik .JK)")
 
 # Sidebar Input
-default_watchlist = 'BBCA, BBRI, BMRI, TLKM, ASII, GOTO, BRMS, ADRO, AMRT, ANTM'
+default_watchlist = 'BBCA, BBRI, BMRI'
 input_stocks = st.sidebar.text_area("Masukkan Kode Saham (pisahkan dengan koma):", default_watchlist)
 
 watchlist_raw = [s.strip().upper() for s in input_stocks.split(',')]
