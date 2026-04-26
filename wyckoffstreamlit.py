@@ -2,7 +2,7 @@ import streamlit as st
 import yfinance as yf
 import pandas as pd
 import numpy as np
-import pandas_ta as ta
+import pandas-ta as ta
 from bs4 import BeautifulSoup
 import requests
 
